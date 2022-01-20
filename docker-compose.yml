@@ -2,21 +2,27 @@ version: '3.8'
 networks:
   app-tier:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.1.0/24
+          gateway: 172.20.1.1
+
 
 services:
     php-apache-environment:
         container_name: php-apache
         build:
-            context: .
+            context: ./php
             dockerfile: Dockerfile
         depends_on:
             - db
         volumes:
-            - .:/var/www/html/
+            - ./php:/var/www/html/
         ports:
             - 8000:80
         networks: 
-            - app-tier
+            app-tier:
+                ipv4_address: 172.20.1.3
     db:
         image: mysql:latest
         restart: always
@@ -26,6 +32,8 @@ services:
         volumes:
             - ./database/:/docker-entrypoint-initdb.d/
         environment:
-              MYSQL_ROOT_PASSWORD: "${DB_PW}"
+            MYSQL_ROOT_PASSWORD: "${DB_PW}"
         networks:
-            - app-tier
+            app-tier:
+                ipv4_address: 172.20.1.2
+            
