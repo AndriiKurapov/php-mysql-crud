@@ -1,11 +1,11 @@
 pipeline {
     agent {
-        docker { image 'node:alpine' }
+        docker { image 'node:docker/compose' }
     }
     stages {
         stage('Test') {
             steps {
-                sh 'node --version'
+                sh 'docker-compose up -d'
             }
         }
     }
