@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker { image 'node:docker/compose' }
+        docker { image 'docker/compose' }
     }
     stages {
         stage('Test') {
